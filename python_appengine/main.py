@@ -24,6 +24,7 @@ import httplib
 from auth_test import AuthTestHandler
 from server_info import ServerInfoHandler
 from match_results import SetMatchResultsHandler
+from matchmaker_results import SetMatchmakerResultsHandler
 from activate_player import ActivatePlayerHandler
 from deactivate_player import DeactivatePlayerHandler
 from get_match_results import GetMatchResultsHandler
@@ -44,6 +45,7 @@ class MainHandler(webapp2.RequestHandler):
         <a href="/activate_player">Activate Player</a><br>
         <a href="/deactivate_player">Deactivate Player</a><br>
         <a href="/match_results">Set Match results</a><br>
+        <a href="/matchmaker_results">Set MatchMaker results</a><br>
         <a href="/get_match_results">Get Match results</a><br>
         <a href="/issue_award">Issue Award</a><br>
         </body>
@@ -59,6 +61,7 @@ app = webapp2.WSGIApplication([
     ('/activate_player', ActivatePlayerHandler),
     ('/deactivate_player', DeactivatePlayerHandler),
     ('/match_results', SetMatchResultsHandler),
+    ('/matchmaker_results', SetMatchmakerResultsHandler),
     ('/get_match_results', GetMatchResultsHandler),
     ('/issue_award', IssueAwardHandler),
     ('/server_create', ServerCreateHandler)

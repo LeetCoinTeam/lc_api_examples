@@ -1,6 +1,6 @@
 
-class Player():
-    """ a leetcoin player """
+class MatchmakerPlayer():
+    """ a leetcoin matchmaker player """
     def __init__(self, platformID, kills, deaths, name, weapon, rank):
         self.platformID = platformID
         self.kills = kills

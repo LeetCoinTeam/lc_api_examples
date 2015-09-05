@@ -11,22 +11,23 @@ from config import *
 from collections import OrderedDict
 
 ## our player data structure
-from player import Player
+from matchmaker_player import MatchmakerPlayer
 
-class SetMatchResultsHandler(BaseHandler):
+class SetMatchmakerResultsHandler(BaseHandler):
     def get(self):
         
         return self.render_html_response(
-            'match_results.html'
+            'matchmaker_results.html'
         )
         
     def post(self):
         """ send the list to the api server """
         
         map_title = self.request.POST.get('map_title')
+        match_key = self.request.POST.get('match_key')
         
-        platformIDS = self.request.get_all('platformIDS')
-        logging.info(platformIDS)
+        platformID = self.request.get_all('platformID')
+        logging.info(platformID)
         
         player_names = self.request.get_all('player_name')
         logging.info(player_names)
@@ -48,8 +49,8 @@ class SetMatchResultsHandler(BaseHandler):
 
         playerlist = []
         
-        for index, platformID in enumerate(platformIDS):
-            player = Player(
+        for index, platformID in enumerate(platformID):
+            player = MatchmakerPlayer(
                 platformID,
                 int(kills[index]),
                 int(deaths[index]),
@@ -63,9 +64,10 @@ class SetMatchResultsHandler(BaseHandler):
             
         player_json_list = json.dumps(playerlist)
             
-        uri = "/api/put_match_results"
+        uri = "/api/put_matchmaker_results"
         
         params = OrderedDict([
+                            ("match_key", match_key),
                           ("map_title", map_title),
                           ("nonce", time.time()),
                           ("player_dict_list", player_json_list),
@@ -76,12 +78,12 @@ class SetMatchResultsHandler(BaseHandler):
         logging.info(params)
 
         # Hash the params string to produce the Sign header value
-        H = hmac.new(shared_secret, digestmod=hashlib.sha512)
+        H = hmac.new(developer_shared_secret, digestmod=hashlib.sha512)
         H.update(params)
         sign = H.hexdigest()
 
         headers = {"Content-type": "application/x-www-form-urlencoded",
-                           "Key":api_key,
+                           "Key":match_key,
                            "Sign":sign}
         if local_testing:
             conn = httplib.HTTPConnection(url)

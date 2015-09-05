@@ -30,7 +30,7 @@ class IssueAwardHandler(BaseHandler):
         award_amount = self.request.get('award_amount')
         logging.info(award_amount)
         
-        award_title = self.request.get_all('award_title')
+        award_title = self.request.get('award_title')
         logging.info(award_title)
         
         award = Award(
